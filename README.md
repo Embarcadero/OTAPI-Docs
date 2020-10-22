@@ -1,7 +1,7 @@
 # OTAPI-Docs
 ## A collaborative project to expand the RAD Studio IDE Open Tools API documentation
 
-Currently participation in this project is by invitation only.  The work is being undertaken by a group of Embarcadero MVPs and, while it is sanctioned by Embarcadero, is an *independant* project.
+Currently participation in this project is by invitation only.  The work is being undertaken by a group of Embarcadero MVPs and, while it is sanctioned by Embarcadero, is an *independent* project.
 
 Anyone can raise questions or notify us of problems by raising an issue here: [https://github.com/Embarcadero/OTAPI-Docs/issues](https://github.com/Embarcadero/OTAPI-Docs/issues)
 
