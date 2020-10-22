@@ -5,7 +5,7 @@ Currently participation in this project is by invitation only.  The work is bein
 
 Anyone can raise questions or notify us of problems by raising an issue here: [https://github.com/Embarcadero/OTAPI-Docs/issues](https://github.com/Embarcadero/OTAPI-Docs/issues)
 
-A wiki has been added here: See [wiki](wiki).
+A wiki has been added here: See [wiki](https://github.com/Embarcadero/OTAPI-Docs/wiki).
 
 For more on RAD Studio click here: [https://www.embarcadero.com/products/rad-studio](https://www.embarcadero.com/products/rad-studio)
 
