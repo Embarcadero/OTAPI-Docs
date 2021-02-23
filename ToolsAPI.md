@@ -1,6 +1,9 @@
-Contains interfaces that you can access by querying [BorlandIDEServices](BorlandIDEServices) when you add the ToolsAPI unit to your package/unit.
+## Description
+The ToolsAPI unit contains interfaces and types (to work with these interfaces) that you can access by querying the [BorlandIDEServices](BorlandIDEServices) variable when you add the ToolsAPI unit to your package/unit.
 
-| Package | designide270.bpl |
+It allows you to [extend the RAD Studio IDE](http://docwiki.embarcadero.com/RADStudio/en/Extending_the_IDE_Using_the_Tools_API).
+
+| Package | designide |
 | ------------- | ------------- |
 
 ## Interfaces
