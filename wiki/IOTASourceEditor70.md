@@ -2,6 +2,7 @@
 
 ## Hierarchy
 Up to Parent: [IOTAEditor](IOTAEditor)
+
 ## Methods
 | Method | Description |
 | ------------- | ------------- |

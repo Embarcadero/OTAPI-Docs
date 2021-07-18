@@ -8,8 +8,8 @@ Up to Parent: [IUnknown](IInterface)
 ## Methods
 | Method | Description |
 | ------------- | ------------- |
-| [AfterSave](IOTANotifier_AfterSave) | This procedure is called immediately after the item is successfully saved. This is not called for IOTAWizard. |
-| [BeforeSave](IOTANotifier_BeforeSave) | This function is called immediately before the item is saved. This is not called for IOTAWizard. |
+| [AfterSave](IOTANotifier_AfterSave) | This procedure is called immediately after the item is successfully saved and is not called for IOTAWizard. |
+| [BeforeSave](IOTANotifier_BeforeSave) | This function is called immediately before the item is saved and is not called for IOTAWizard. |
 | [Destroyed](IOTANotifier_Destroyed) | The associated item is being destroyed so all references should be dropped. Exceptions are ignored. |
 | [Modified](IOTANotifier_Modified) | This associated item was modified in some way. This is not called for IOTAWizard. |
 
