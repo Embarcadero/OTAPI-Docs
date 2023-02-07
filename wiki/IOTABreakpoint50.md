@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTABreakpoint40](IOTABreakpoint40)
 
 ## Methods
 | Method | Description |

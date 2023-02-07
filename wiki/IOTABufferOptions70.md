@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTABufferOptions60](IOTABufferOptions60)
 
 ## Methods
 | Method | Description |

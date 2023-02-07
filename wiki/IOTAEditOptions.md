@@ -6,7 +6,7 @@ Use the [IOTAEditorServices](IOTAEditorServices) to get options for a particular
 You can also add your own editor options using the [IOTAEditorServices](IOTAEditorServices).
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTAEditOptions60](IOTAEditOptions60)
 
 ## Methods
 | Method | Description |

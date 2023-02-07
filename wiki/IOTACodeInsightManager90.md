@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTACodeInsightManager100](IOTACodeInsightManager100)
 
 ## Methods
 | Method | Description |

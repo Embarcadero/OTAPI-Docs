@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTAIDEThemingServices260](IOTAIDEThemingServices260)
 
 ## Methods
 | Method | Description |

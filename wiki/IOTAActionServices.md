@@ -2,7 +2,7 @@
 Performs basic file actions: open, close, save and reload a file.
 
 ## Hierarchy
-Up to Parent: [IUnknown](IUnknown)
+Up to Parent: [IOTAModuleCreator](IOTAModuleCreator)
 
 ## Methods
 | Method | Description |

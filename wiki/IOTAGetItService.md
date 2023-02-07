@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTAGetItService230](IOTAGetItService230)
 
 ## Methods
 | Method | Description |

@@ -40,6 +40,17 @@ var LPackageServices: IOTAPackageServices210 := BorlandIDEServices as IOTAPackag
 LPackageServices.InstallPackage(...);
 ```
 
+For example, if you want to obtain [IOTAEnvironmentOptions](IOTAEnvironmentOptions), either query for [IOTAServices50](IOTAServices50) or its eventual descendant, [IOTAServices](IOTAServices)
+```
+var 
+  OTAServices: IOTAServices;
+  LEnvironmentOptions: IOTAEnvironmentOptions;
+...  
+if Supports(BorlandIDEServices, IOTAServices, OTAServices) then
+  LEnvironmentOptions := OTAServices.GetEnvironmentOptions;
+```
+
+
 The following are interfaces that you can query from BorlandIDEServices:
 
 | interface | GUID |

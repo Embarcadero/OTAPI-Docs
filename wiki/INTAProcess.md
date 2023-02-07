@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [INTAProcess150](INTAProcess150)
 
 ## Methods
 | Method | Description |

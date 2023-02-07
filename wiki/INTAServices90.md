@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [INTAServices70](INTAServices70)
 
 ## Methods
 | Method | Description |

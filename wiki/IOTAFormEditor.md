@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTAEditor](IOTAEditor)
 
 ## Methods
 | Method | Description |

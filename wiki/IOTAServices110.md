@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTAServices100](IOTAServices100)
 
 ## Methods
 | Method | Description |

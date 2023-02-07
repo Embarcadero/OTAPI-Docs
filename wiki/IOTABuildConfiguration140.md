@@ -15,7 +15,7 @@ IOTABuildConfiguration140 methods and properties.
 
 ***
 
-Up to Parent: [IUnknown](IInterface)
+Up to Parent: [IUnknown](IUnknown)
 
 | Method | Description |
 | ------------- | ------------- |

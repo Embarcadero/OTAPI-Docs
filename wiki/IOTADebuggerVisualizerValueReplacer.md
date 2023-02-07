@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IOTADebuggerVisualizer](IOTADebuggerVisualizer)
 
 ## Methods
 | Method | Description |

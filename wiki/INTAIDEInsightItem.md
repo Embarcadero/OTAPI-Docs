@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [INTAIDEInsightItem280](INTAIDEInsightItem280)
 
 ## Methods
 | Method | Description |

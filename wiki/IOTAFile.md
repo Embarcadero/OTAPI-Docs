@@ -4,7 +4,7 @@ IOTAFile is a base interface to supply file content for creators. If you want to
 
 ## Hierarchy
 
-Up to Parent: [IUnknown](IInterface)
+Up to Parent: [IUnknown](IUnknown)
 
 ## Methods 
 | Method | Description |

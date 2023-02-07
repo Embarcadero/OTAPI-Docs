@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IUnknown](IUnknown)
 
 ## Methods
 | Method | Description |

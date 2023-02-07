@@ -1,7 +1,7 @@
 ## Description
 
 ## Hierarchy
-Up to Parent: [IInterface](IInterface)
+Up to Parent: [IDispatch](IDispatch)
 
 ## Methods
 | Method | Description |
