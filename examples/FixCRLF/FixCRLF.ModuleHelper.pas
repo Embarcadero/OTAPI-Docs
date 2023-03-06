@@ -54,7 +54,7 @@ begin
     vStartColumn := APosition.Column;
     APosition.MoveEOL;
     LEndColumn := APosition.Column;
-    LNumChars := (LEndColumn - vStartColumn) + 1;
+    LNumChars := (LEndColumn - vStartColumn) + 2;
     APosition.MoveReal(vStartRow, 1);
     Result := APosition.Read(LNumChars);
   finally

@@ -79,8 +79,6 @@ begin
       LPosition.MoveReal(vStartRow, vStartColumn);
       try
         repeat
-          if (LPosition.Row = LEOFRow) and (LPosition.Column >= LEOFColumn) then
-            Break;
           LLine := ReadLine(LPosition, LMovingRow, LMovingColumn, vEOF);
           LTarget := TRegEx.Replace(LLine, '(?:\r?\n|\r)+', #13#10);
           LSS.WriteString(LTarget);
@@ -125,8 +123,6 @@ begin
           end;
         LSS.Free;
 
-        // Release interfaces manually because there's
-        // an issue releasing it automatically
         LModSvcs := nil;
         LModule := nil;
         LEditor := nil;
