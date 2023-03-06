@@ -1,0 +1,5 @@
+Win32/
+__history/
+__recovery/
+Win64/
+*.local
