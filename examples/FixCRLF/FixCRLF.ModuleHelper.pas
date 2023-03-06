@@ -44,7 +44,7 @@ end;
 function ReadLine(const APosition: IOTAEditPosition;
   var vStartRow, vStartColumn: Integer; var vEOF: Boolean): string;
 var
-  LEndColumn, LNumChars: Integer;
+  I, LEndColumn, LNumChars: Integer;
 begin
   APosition.Save;
   try
@@ -54,9 +54,16 @@ begin
     vStartColumn := APosition.Column;
     APosition.MoveEOL;
     LEndColumn := APosition.Column;
-    LNumChars := (LEndColumn - vStartColumn) + 2;
+    LNumChars := LEndColumn + 1;
     APosition.MoveReal(vStartRow, 1);
     Result := APosition.Read(LNumChars);
+    I := Length(Result);
+    if Length(Result) > 0 then
+      while (Result[I] <> #13) and (Result[I] <> #10) do
+        begin
+          Delete(Result, Length(Result), 1);
+          I := Length(Result);
+        end;
   finally
     APosition.Restore;
     if not APosition.MoveReal(vStartRow+1, 1) then

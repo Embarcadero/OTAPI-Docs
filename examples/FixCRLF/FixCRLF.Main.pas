@@ -50,7 +50,7 @@ var
   LMsgSvcs: IOTAMessageServices;
   LMsgGroup: IOTAMessageGroup;
   vEOF, LAutoIndent: Boolean;
-  vStartRow, vStartColumn, LMovingRow, LMovingColumn, LEOFRow, LEOFColumn: Integer;
+  vStartRow, vStartColumn, LMovingRow, LMovingColumn: Integer;
 begin
   case NotifyCode of
     ofnFileOpened: begin
@@ -74,8 +74,6 @@ begin
       vStartColumn := LPosition.Column;
       vStartRow := LPosition.Row;
       LPosition.MoveEOF;
-      LEOFRow := LPosition.Row;
-      LEOFColumn := LPosition.Column;
       LPosition.MoveReal(vStartRow, vStartColumn);
       try
         repeat
@@ -92,7 +90,6 @@ begin
           LModified := True;
         until False;
       finally
-        LSourceEditor.Show;
         if LModified and not LBuffer.IsReadOnly then
           begin
             LPosition.MoveReal(vStartRow, vStartColumn);
@@ -110,7 +107,8 @@ begin
               LModule.Refresh(True); // Force reload
               if Assigned(LMsgSvcs) and Assigned(LMsgGroup) then
                 begin
-                  LMsg := Format('Converted %s line endings into CRLF', [ExtractFileName(LFileName)]);
+                  LMsg := Format('%s(%d): Line endings were inconsistent'+
+                    ' and have been converted to CRLF.', [ExtractFileName(LFileName), 1]);
                   LMsgSvcs.AddTitleMessage(LMsg, LMsgGroup);
                 end;
             except
