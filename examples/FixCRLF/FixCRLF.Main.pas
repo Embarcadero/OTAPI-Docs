@@ -97,7 +97,7 @@ begin
             LAutoIndent := LBuffer.BufferOptions.AutoIndent;
             if LAutoIndent then
               LBuffer.BufferOptions.AutoIndent := False;
-            LPosition.InsertText(LSS.DataString);
+            LPosition.InsertText(UTF8Encode(LSS.DataString));
             if LAutoIndent then
               LBuffer.BufferOptions.AutoIndent := True;
             LMsgGroup := GetMsgGroup('Editor', LMsgSvcs);
