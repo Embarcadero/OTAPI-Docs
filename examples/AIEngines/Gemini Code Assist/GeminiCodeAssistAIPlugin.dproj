@@ -6,7 +6,7 @@
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">GeminiCodeAssistAIPlugin</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Package</AppType>
@@ -92,6 +92,7 @@
         <DCC_UsePackage>vcl;rtl;vclactnband;vclimg;vclwinx;xmlrtl;RESTComponents;bindcomp;$(DCC_UsePackage)</DCC_UsePackage>
         <DllSuffix>$(Auto)</DllSuffix>
         <DCC_AdditionalSwitches>--no-compiler-signature</DCC_AdditionalSwitches>
+        <DCC_Description>Gemini Code Assist Plugin</DCC_Description>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>vcl;rtl;vclactnband;vclimg;vclwinx;xmlrtl;RESTComponents;bindcomp;$(DCC_UsePackage)</DCC_UsePackage>
@@ -101,6 +102,7 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DllSuffix>$(Auto)</DllSuffix>
         <DCC_AdditionalSwitches>--no-compiler-signature</DCC_AdditionalSwitches>
+        <DCC_Description>Gemini Code Assist Plugin</DCC_Description>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -120,11 +122,14 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_BplOutput>$(BDSCOMMONDIR)\Bpl\$(Platform)</DCC_BplOutput>
+        <DCC_Description>Gemini Code Assist Plugin</DCC_Description>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_BplOutput>$(BDSCOMMONDIR)\Bpl\$(Platform)</DCC_BplOutput>
+        <Debugger_HostApplication>$(bds)\bin64\bds.exe</Debugger_HostApplication>
+        <Debugger_RunParams>-rGeminiCodeAssist</Debugger_RunParams>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>

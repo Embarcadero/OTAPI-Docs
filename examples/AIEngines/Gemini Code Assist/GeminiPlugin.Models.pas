@@ -3,7 +3,8 @@ unit GeminiPlugin.Models;
 interface
 
 uses
-  GeminiPlugin.JsonHelper, System.Generics.Collections, REST.Json.Types;
+  GeminiPlugin.JsonHelper, System.Generics.Collections, REST.Json.Types,
+  System.Classes;
 
 {$M+}
 
@@ -18,10 +19,11 @@ type
     property Text: string read FText write FText;
   end;
 
-  TContent = class
+  TContent = class(TJsonReflectionBase)
   protected
     [JSONName('parts'), JSONMarshalled(False)]
     FPartsArray: TArray<TPart>;
+
     [GenericListReflect]
     FParts: TObjectList<TPart>;
     function GetParts: TObjectList<TPart>;
@@ -36,13 +38,9 @@ type
   protected
     [JSONName('contents'), JSONMarshalled(False)]
     FContentsArray: TArray<TContent>;
+
     [GenericListReflect]
     FContents: TObjectList<TContent>;
-    [JSONName('safetySettings')]
-    FSafetySettings: string; // Not used for now
-    [JSONName('generationConfig')]
-    FGenerationConfig: string; // Not used for now
-
     function GetContents: TObjectList<TContent>;
     function GetAsJson: string; override;
   public
@@ -67,9 +65,9 @@ type
   protected
     [JSONName('candidates'), JSONMarshalled(False)]
     FCandidatesArray: TArray<TCandidate>;
+
     [GenericListReflect]
     FCandidates: TObjectList<TCandidate>;
-
     function GetCandidates: TObjectList<TCandidate>;
     function GetAsJson: string; override;
   public
@@ -110,12 +108,13 @@ end;
 
 destructor TContent.Destroy;
 begin
-  GetParts.Free;
+  FParts.Free;
   inherited;
 end;
 
 function TContent.GetParts: TObjectList<TPart>;
 begin
+  ObjectList<TPart>(FParts, FPartsArray);
   Result := FParts;
 end;
 
@@ -134,13 +133,14 @@ begin
 end;
 
 function TRequestObj.GetAsJson: string;
-begin
+begin                  // Source, Destination
   RefreshArray<TContent>(FContents, FContentsArray);
   Result := inherited;
 end;
 
 function TRequestObj.GetContents: TObjectList<TContent>;
 begin
+                              // Destination, Source
   Result := ObjectList<TContent>(FContents, FContentsArray);
 end;
 
@@ -174,12 +174,14 @@ end;
 
 function TResponseObj.GetAsJson: string;
 begin
-  RefreshArray<TCandidate>(FCandidates, FCandidatesArray);
+                         // Source, Destination
+//  RefreshArray<TCandidate>(FCandidates, FCandidatesArray);
   Result := inherited;
 end;
 
 function TResponseObj.GetCandidates: TObjectList<TCandidate>;
 begin
+                                  // Destination, Source
   Result := ObjectList<TCandidate>(FCandidates, FCandidatesArray);
 end;
 

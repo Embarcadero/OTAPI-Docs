@@ -3,7 +3,8 @@ unit GeminiPlugin.JsonHelper;
 interface
 
 uses
-  System.Classes, System.Json, Rest.Json, System.Generics.Collections,
+  System.Classes, System.Json, Rest.Json,
+  System.Generics.Collections,
   Rest.JsonReflect;
 
 const
@@ -32,11 +33,6 @@ type
   end;
 
   GenericListReflectAttribute = class(JsonReflectAttribute)
-  public
-    constructor Create;
-  end;
-
-  SuppressZeroAttribute = class(JsonReflectAttribute)
   public
     constructor Create;
   end;
@@ -184,23 +180,18 @@ begin
   if AList = nil then
   begin
     AList := TList<T>.Create;
-    AList.AddRange(ASource);
   end;
-
   Result := AList;
 end;
 
 function TArrayMapper.ObjectList<T>(var AList: TObjectList<T>; const ASource: TArray<T>): TObjectList<T>;
-var
-  Element: T;
 begin
   if AList = nil then
   begin
     AList := TObjectList<T>.Create(True);
-    for Element in ASource do
-      AList.Add(Element);
   end;
-
+  if AList.Count <> Length(ASource) then
+    AList.AddRange(ASource);
   Result := AList;
 end;
 
@@ -224,7 +215,8 @@ var
   List: TList<TObject>;
   RttiProperty: TRttiProperty;
 begin
-  RttiProperty := ctx.GetType(Data.ClassInfo).GetProperty(Copy(Field, 2, MAXINT));
+  var LPropertyName := Copy(Field, 2, MAXINT);
+  RttiProperty := ctx.GetType(Data.ClassInfo).GetProperty(LPropertyName);
   List := TList<TObject>(RttiProperty.GetValue(Data).AsObject);
   Result := TListOfObjects(List.List);
   SetLength(Result, List.Count);
@@ -233,45 +225,6 @@ end;
 constructor GenericListReflectAttribute.Create;
 begin
   inherited Create(ctObjects, rtObjects, TGenericListFieldInterceptor, nil, false);
-end;
-
-type
-  TSuppressZeroDateInterceptor = class(TJSONInterceptor)
-  public
-    function StringConverter(Data: TObject; Field: string): string; override;
-    procedure StringReverter(Data: TObject; Field: string; Arg: string); override;
-  end;
-
-function TSuppressZeroDateInterceptor.StringConverter(Data: TObject; Field: string): string;
-var
-  RttiContext: TRttiContext;
-  Date: TDateTime;
-begin
-  Date := RttiContext.GetType(Data.ClassType).GetField(Field).GetValue(Data).AsType<TDateTime>;
-  if Date = 0 then
-    Result := string.Empty
-  else
-    Result := DateToISO8601(Date, True);
-end;
-
-procedure TSuppressZeroDateInterceptor.StringReverter(Data: TObject; Field, Arg: string);
-var
-  RttiContext: TRttiContext;
-  Date: TDateTime;
-begin
-  if Arg.IsEmpty then
-    Date := 0
-  else
-    Date := ISO8601ToDate(Arg, True);
-
-  RttiContext.GetType(Data.ClassType).GetField(Field).SetValue(Data, Date);
-end;
-
-{ SuppressZeroAttribute }
-
-constructor SuppressZeroAttribute.Create;
-begin
-  inherited Create(ctString, rtString, TSuppressZeroDateInterceptor);
 end;
 
 end.

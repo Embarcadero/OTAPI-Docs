@@ -25,6 +25,7 @@ package GeminiCodeAssistAIPlugin;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'Gemini Code Assist Plugin'}
 {$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
 

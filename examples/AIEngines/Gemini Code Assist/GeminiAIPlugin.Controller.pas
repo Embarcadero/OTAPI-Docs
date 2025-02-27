@@ -3,7 +3,9 @@ unit GeminiAIPlugin.Controller;
 interface
 
 uses
-  System.SysUtils, REST.Client, Rest.Types, Rest.Json, System.JSON, ToolUtils,
+  System.SysUtils, REST.Client, Rest.Types,
+  Rest.Json,
+  System.JSON, ToolUtils,
   ToolsAPI.AI, GeminiAIPlugin.Consts, GeminiPlugin.Models;
 
 type
@@ -40,6 +42,14 @@ type
 
 implementation
 
+/// <summary>
+/// curl
+/// "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=APIKey"
+/// -H 'Content-Type: application/json'
+/// -X POST
+/// -d '{"contents": [{ "parts": [{"text": "Explain how this API works"}] }] }'
+/// </summary>
+
 { TGeminiAIRestClient }
 
 function TGeminiAIRestClient.AddNotifier(const ANotifier: IOTAAIServicesNotifier): Integer;
@@ -75,7 +85,7 @@ begin
     begin
       var LErrors: TErrorObj;
       try
-        LErrors := TJson.JsonToObject<TErrorObj>(TJSONObject(LJsonObj));
+        LErrors := TJson.JsonToObject<TErrorObj>(LJsonObj);
         if LErrors <> nil then
         begin
           try
@@ -92,8 +102,9 @@ begin
     begin
       try
         AValue := FRestResponse.Content;
-      except on E: Exception do
-        AValue := E.Message;
+      except
+        on E: Exception do
+          AValue := E.Message;
       end;
     end;
   end;
@@ -116,8 +127,8 @@ end;
 
 destructor TGeminiAIRestClient.Destroy;
 begin
-  FreeAndNil(FRestResponse);
   FreeAndNil(FRestRequest);
+  FreeAndNil(FRestResponse);
   FreeAndNil(FRestClient);
   inherited;
 end;
@@ -148,9 +159,11 @@ begin
       procedure(AObject: TObject)
       begin
         NotifyError(Exception(AObject).Message, ARequestID);
-      end);
-  except on E: Exception do
-    NotifyError(E.Message, ARequestID);
+      end
+    );
+  except
+    on E: Exception do
+      NotifyError(E.Message, ARequestID);
   end;
 end;
 
@@ -182,13 +195,14 @@ begin
   try
     try
       FreeAndNil(FResponseObject);
-      FResponseObject := TJson.JsonToObject<TResponseObj>(TJSONObject(LJsonObj));
+      FResponseObject := TJson.JsonToObject<TResponseObj>(LJsonObj);
       DoFinishLoad(FResponseObject, ARequestID);
     finally
       LJsonObj.Free;
     end;
-  except on E: Exception do
-    NotifyError(E.Message, ARequestID);
+  except
+    on E: Exception do
+      NotifyError(E.Message, ARequestID);
   end;
 end;
 
@@ -251,25 +265,27 @@ begin
   try
     var LContent := TContent.Create;
     var LPart := TPart.Create;
-    try
-      LPart.Text := AValue;
-      LContent.Parts.Add(LPart);
-      FRequestObj.Contents.Add(LContent);
-      FRestRequest.AddBody(FRequestObj.AsJson, TRESTContentType.ctAPPLICATION_JSON);
-    finally
-      FreeAndNil(LContent);
-      FreeAndNil(LPart);
-    end;
+    LPart.Text := AValue;
+    LContent.Parts.Add(LPart);
+    FRequestObj.Contents.Add(LContent);
+    var LBody := FRequestObj.AsJson;
+    FRestRequest.AddBody(LBody, TRESTContentType.ctAPPLICATION_JSON);
   finally
     FreeAndNil(FRequestObj);
   end;
 end;
 
 procedure TGeminiAIRestClient.PrepareHeader;
+var
+  LBaseURL, LMethod: string;
 begin
-  FRestClient.BaseURL := FBaseURL;
+  LBaseURL := FBaseURL; // eg https://generativelanguage.googleapis.com/v1beta/models/
+  if not LBaseURL.EndsWith('/') then
+    LBaseURL := LBaseURL + '/';
+  LMethod := 'generateContent';
+  FRestClient.BaseURL := Format('%s%s:%s?key=%s', [LBaseURL, FModel, LMethod, FApiKey]);
+  // eg, %s:generateContent?key=%s
   FRestRequest.Timeout := FTimeOut;
-  FRestRequest.Params.AddHeader('x-goog-api-key', FApiKey).Options := [poDoNotEncode];
   FRestRequest.Params.AddHeader('Accept', TRESTContentType.ctAPPLICATION_JSON).Options := [poDoNotEncode];
   FRestRequest.Params.AddHeader('Content-Type', TRESTContentType.ctAPPLICATION_JSON).Options := [poDoNotEncode];
 end;
