@@ -9,7 +9,7 @@ uses
 
 type
   TGeminiPlugin = class(TGeminiAIRestClient, IOTAAIPlugin)
-  private
+  protected
     procedure LoadSetting;
     {IOTAAIPlugin}
     function GetName: string;
@@ -87,7 +87,7 @@ begin
   LReg := TRegistry.Create;
   try
     LReg.RootKey := HKEY_CURRENT_USER;
-    if LReg.OpenKey(TGeminiAIFrame_Setting.GetRegKey, False) then
+    if LReg.OpenKey(TFrame_Setting_GeminiCodeAssist.GetRegKey, False) then
     begin
       if LReg.ValueExists(cGeminiAI_RegKey_Enabled) then
         Result := LReg.ReadBool(cGeminiAI_RegKey_Enabled);
@@ -110,7 +110,7 @@ end;
 
 function TGeminiPlugin.GetSettingFrame(AOwner: TComponent): IOTAAIPluginSetting;
 begin
-  Result := TGeminiAIFrame_Setting.Create(AOwner);
+  Result := TFrame_Setting_GeminiCodeAssist.Create(AOwner);
 end;
 
 function TGeminiPlugin.Instruction(const AInput, AInstruction: string): TGUID;
@@ -130,7 +130,7 @@ begin
   LReg := TRegistry.Create;
   try
     LReg.RootKey := HKEY_CURRENT_USER;
-    if LReg.OpenKey(TGeminiAIFrame_Setting.GetRegKey, False) then
+    if LReg.OpenKey(TFrame_Setting_GeminiCodeAssist.GetRegKey, False) then
     begin
       if LReg.ValueExists(cGeminiAI_RegKey_BaseURL) then
         FBaseURL := LReg.ReadString(cGeminiAI_RegKey_BaseURL);

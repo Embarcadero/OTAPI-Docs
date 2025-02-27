@@ -9,7 +9,7 @@ uses
   GeminiAIPlugin.Consts, System.RegularExpressions, Vcl.Mask;
 
 type
-  TGeminiAIFrame_Setting = class(TFrame, IOTAAIPluginSetting)
+  TFrame_Setting_GeminiCodeAssist = class(TFrame, IOTAAIPluginSetting)
     Chk_Enabled: TCheckBox;
     Edt_ApiKey: TLabeledEdit;
     Edt_BaseURL: TLabeledEdit;
@@ -41,11 +41,12 @@ implementation
 
 uses
   ToolsAPI;
+
 {$R *.dfm}
 
 { TGeminiAIFrame_Setting }
 
-function TGeminiAIFrame_Setting.GetModified: Boolean;
+function TFrame_Setting_GeminiCodeAssist.GetModified: Boolean;
 begin
   Result := (FInitialEnabled <> Chk_Enabled.Checked) or
     (FInitialBaseURL <> Edt_BaseURL.Text) or
@@ -54,7 +55,7 @@ begin
     (FInitialTimeout <> StrToIntDef(Edt_Timeout.Text, 0));
 end;
 
-class function TGeminiAIFrame_Setting.GetRegKey: string;
+class function TFrame_Setting_GeminiCodeAssist.GetRegKey: string;
 var
   LServices50: IOTAServices50;
 begin
@@ -72,12 +73,12 @@ begin
     end;
 end;
 
-function TGeminiAIFrame_Setting.GetPluginEnabled: Boolean;
+function TFrame_Setting_GeminiCodeAssist.GetPluginEnabled: Boolean;
 begin
   Result := Chk_Enabled.Checked;
 end;
 
-procedure TGeminiAIFrame_Setting.LoadSettings;
+procedure TFrame_Setting_GeminiCodeAssist.LoadSettings;
 var
   LReg: TRegistry;
 begin
@@ -108,13 +109,13 @@ begin
   end;
 end;
 
-procedure TGeminiAIFrame_Setting.Loaded;
+procedure TFrame_Setting_GeminiCodeAssist.Loaded;
 begin
   inherited;
   LoadSettings;
 end;
 
-procedure TGeminiAIFrame_Setting.SaveSettings;
+procedure TFrame_Setting_GeminiCodeAssist.SaveSettings;
 var
   LReg: TRegistry;
 begin
@@ -135,7 +136,7 @@ begin
   end;
 end;
 
-function TGeminiAIFrame_Setting.ParameterValidations(var AErrorMsg: string): Boolean;
+function TFrame_Setting_GeminiCodeAssist.ParameterValidations(var AErrorMsg: string): Boolean;
 var
   Regex: TRegEx;
 begin

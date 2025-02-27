@@ -25,6 +25,7 @@ package GeminiCodeAssistAIPlugin;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
 
 requires
@@ -40,6 +41,6 @@ contains
   GeminiPlugin.JsonHelper in 'GeminiPlugin.JsonHelper.pas',
   GeminiAIPlugin.Main in 'GeminiAIPlugin.Main.pas',
   GeminiPlugin.Models in 'GeminiPlugin.Models.pas',
-  GeminiAIPlugin.Setting in 'GeminiAIPlugin.Setting.pas' {GeminiAIFrame_Setting: TFrame};
+  GeminiAIPlugin.Setting in 'GeminiAIPlugin.Setting.pas' {Frame_Setting_GeminiCodeAssist: TFrame};
 
 end.
