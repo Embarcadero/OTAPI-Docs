@@ -32,7 +32,7 @@ type
     { Public declarations }
     procedure LoadSettings;
     procedure SaveSettings;
-    function ParameterValidations(var AErrorMsg: string): Boolean;
+    function ParameterValidations(var VErrorMsg: string): Boolean;
     property Modified: Boolean read GetModified;
     property PluginEnabled: Boolean read GetPluginEnabled;
   end;
@@ -136,42 +136,50 @@ begin
   end;
 end;
 
-function TFrame_Setting_GeminiCodeAssist.ParameterValidations(var AErrorMsg: string): Boolean;
+function TFrame_Setting_GeminiCodeAssist.ParameterValidations(var VErrorMsg: string): Boolean;
 var
   Regex: TRegEx;
+  LErrorMsg: string;
 begin
   Result := True;
   if Edt_BaseURL.EditText.Trim.IsEmpty then
-  begin
-    Result := False;
-    ShowMessage(cGeminiAI_Msg_BaseURL);
-  end else
-  begin
-    Regex := TRegEx.Create(cGeminiAI_URLRegex, [TRegExOption.roIgnoreCase]);
-    if not Regex.IsMatch(Edt_BaseURL.Text) then
     begin
       Result := False;
-      ShowMessage(cGeminiAI_Msg_InvalidURL);
+      LErrorMsg := cGeminiAI_Msg_BaseURL;
+    end else
+    begin
+      Regex := TRegEx.Create(cGeminiAI_URLRegex, [TRegExOption.roIgnoreCase]);
+      if not Regex.IsMatch(Edt_BaseURL.Text) then
+        begin
+          Result := False;
+          LErrorMsg := cGeminiAI_Msg_InvalidURL;
+        end;
     end;
-  end;
 
   if Result and Edt_Model.EditText.Trim.IsEmpty then
-  begin
-    Result := False;
-    ShowMessage(cGeminiAI_Msg_Model);
-  end;
+    begin
+      Result := False;
+      LErrorMsg := cGeminiAI_Msg_Model;
+    end;
 
   if Result and Edt_ApiKey.EditText.Trim.IsEmpty then
-  begin
-    Result := False;
-    ShowMessage(cGeminiAI_Msg_APIKey);
-  end;
+    begin
+      Result := False;
+      LErrorMsg := cGeminiAI_Msg_APIKey;
+    end;
 
   if Result and Edt_Timeout.EditText.Trim.IsEmpty then
-  begin
-    Result := False;
-    ShowMessage(cGeminiAI_Msg_Timeout);
-  end;
+    begin
+      Result := False;
+      LErrorMsg := cGeminiAI_Msg_Timeout;
+    end;
+
+  if not Result then
+    begin
+      VErrorMsg := LErrorMsg;
+      ShowMessage(LErrorMsg);
+    end;
+
 end;
 
 end.

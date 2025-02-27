@@ -18,12 +18,12 @@ const
   cGeminiAI_RegKey_ApiKey = 'ApiKey';
   cGeminiAI_RegKey_Timeout = 'Timeout';
 
-  cGeminiAI_Msg_BaseURL = 'Please Enter the BaseURL for Gemini';
-  cGeminiAI_Msg_Model = 'Please Enter the Model for Gemini';
-  cGeminiAI_Msg_APIKey = 'Please Enter the API Key for Gemini';
-  cGeminiAI_Msg_Timeout = 'Please Enter the Timeout value for Gemini';
+  cGeminiAI_Msg_BaseURL = 'Please enter the BaseURL for Gemini';
+  cGeminiAI_Msg_Model = 'Please enter the Model for Gemini';
+  cGeminiAI_Msg_APIKey = 'Please enter the API Key for Gemini';
+  cGeminiAI_Msg_Timeout = 'Please enter the Timeout value for Gemini';
   cGeminiAI_URLRegex = '^((https?://[a-zA-Z0-9.-]+(:\d+)?(/.*)?)|(localhost(:\d+)?(/.*)?))$';
-  cGeminiAI_Msg_InvalidURL = 'Invalid Base URL. Please provide a valid Localhost, HTTP or HTTPS URL.';
+  cGeminiAI_Msg_InvalidURL = 'Invalid Base URL. Please provide a valid localhost, HTTP or HTTPS URL.';
 
   cGeminiAI_ContentType = 'application/json';
 
