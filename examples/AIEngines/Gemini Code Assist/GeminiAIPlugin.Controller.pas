@@ -6,7 +6,11 @@ uses
   System.SysUtils, REST.Client, Rest.Types,
   Rest.Json,
   System.JSON, ToolUtils,
-  ToolsAPI.AI, GeminiAIPlugin.Consts, GeminiPlugin.Models;
+  ToolsAPI.AI, GeminiAIPlugin.Consts,
+  // GeminiPlugin.Models;
+  GeminiAIPlugin.Model.Common,
+  GeminiAIPlugin.Model.Requests,
+  GeminiAIPlugin.Model.Responses;
 
 type
   TGeminiAIRestClient = class(TOTAClass)
@@ -14,13 +18,13 @@ type
     FRestClient: TCustomRESTClient;
     FRestResponse: TRESTResponse;
     FRestRequest: TRESTRequest;
-    FResponseObject: TResponseObj;
-    FRequestObj: TRequestObj;
+    FResponseObject: TGeminiAIResponseObj;
+    FRequestObj: TGeminiAIRequestObj;
 
     function IsParsable(var AJsonObj: TJSONObject): Boolean;
     function CheckError(out AValue: string): Boolean;
     procedure DoCompletion(const ARequestID: TGUID);
-    procedure DoFinishLoad(const AResponseObj: TResponseObj; const ARequestID: TGUID);
+    procedure DoFinishLoad(const AResponseObj: TGeminiAIResponseObj; const ARequestID: TGUID);
     procedure PrepareBody(const AValue: string);
     procedure PrepareHeader;
     procedure NotifyError(const AMessage: string; const ARequestID: TGUID);
@@ -41,14 +45,6 @@ type
   end;
 
 implementation
-
-/// <summary>
-/// curl
-/// "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=APIKey"
-/// -H 'Content-Type: application/json'
-/// -X POST
-/// -d '{"contents": [{ "parts": [{"text": "Explain how this API works"}] }] }'
-/// </summary>
 
 { TGeminiAIRestClient }
 
@@ -83,21 +79,21 @@ begin
     LJsonObj := nil;
     if IsParsable(LJsonObj) then
     begin
-      var LErrors: TErrorObj;
-      try
-        LErrors := TJson.JsonToObject<TErrorObj>(LJsonObj);
-        if LErrors <> nil then
-        begin
-          try
-            AValue := LErrors.Error.Message;
-            Result := True;
-          finally
-            LErrors.Free;
-          end;
-        end;
-      finally
-        FreeAndNil(LJsonObj);
-      end;
+//      var LErrors: TErrorObj;
+//      try
+//        LErrors := TJson.JsonToObject<TErrorObj>(LJsonObj);
+//        if LErrors <> nil then
+//        begin
+//          try
+//            AValue := LErrors.Error.Message;
+//            Result := True;
+//          finally
+//            LErrors.Free;
+//          end;
+//        end;
+//      finally
+//        FreeAndNil(LJsonObj);
+//      end;
     end else
     begin
       try
@@ -195,7 +191,7 @@ begin
   try
     try
       FreeAndNil(FResponseObject);
-      FResponseObject := TJson.JsonToObject<TResponseObj>(LJsonObj);
+      FResponseObject := TGeminiAIResponseObj.FromJSON(LJsonObj);
       DoFinishLoad(FResponseObject, ARequestID);
     finally
       LJsonObj.Free;
@@ -216,10 +212,9 @@ begin
   FNotifyList.Unlock;
 end;
 
-procedure TGeminiAIRestClient.DoFinishLoad(const AResponseObj: TResponseObj; const ARequestID: TGUID);
+procedure TGeminiAIRestClient.DoFinishLoad(const AResponseObj: TGeminiAIResponseObj; const ARequestID: TGUID);
 var
   LMessage: string;
-  LPart: TPart;
 begin
   if AResponseObj = nil then
     LMessage := cGeminiAI_Msg_NoAnswer
@@ -229,7 +224,7 @@ begin
     begin
       if AResponseObj.Candidates[0].Content.Parts.Count > 0 then
       begin
-        LPart := AResponseObj.Candidates[0].Content.Parts[0];
+        var LPart := AResponseObj.Candidates[0].Content.Parts[0];
         LMessage := LPart.Text;
       end;
     end;
@@ -261,14 +256,14 @@ end;
 
 procedure TGeminiAIRestClient.PrepareBody(const AValue: string);
 begin
-  FRequestObj := TRequestObj.Create;
+  FRequestObj := TGeminiAIRequestObj.Create;
   try
-    var LContent := TContent.Create;
+    var LContent := TGeminiRequestContent.Create;
     var LPart := TPart.Create;
     LPart.Text := AValue;
     LContent.Parts.Add(LPart);
     FRequestObj.Contents.Add(LContent);
-    var LBody := FRequestObj.AsJson;
+    var LBody := FRequestObj.ToJSONString;
     FRestRequest.AddBody(LBody, TRESTContentType.ctAPPLICATION_JSON);
   finally
     FreeAndNil(FRequestObj);
@@ -290,4 +285,6 @@ begin
   FRestRequest.Params.AddHeader('Content-Type', TRESTContentType.ctAPPLICATION_JSON).Options := [poDoNotEncode];
 end;
 
+initialization
+  TJSONMappers.UnRegisterLibrary('Rest.JSON');
 end.

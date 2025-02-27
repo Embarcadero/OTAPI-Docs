@@ -1,4 +1,4 @@
-package GeminiCodeAssistAIPlugin;
+package GeminiAIPlugin;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -25,7 +25,7 @@ package GeminiCodeAssistAIPlugin;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'Gemini Code Assist Plugin'}
+{$DESCRIPTION 'Gemini AI Plugin'}
 {$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
 
@@ -39,9 +39,10 @@ requires
 contains
   GeminiAIPlugin.Consts in 'GeminiAIPlugin.Consts.pas',
   GeminiAIPlugin.Controller in 'GeminiAIPlugin.Controller.pas',
-  GeminiPlugin.JsonHelper in 'GeminiPlugin.JsonHelper.pas',
   GeminiAIPlugin.Main in 'GeminiAIPlugin.Main.pas',
-  GeminiPlugin.Models in 'GeminiPlugin.Models.pas',
-  GeminiAIPlugin.Setting in 'GeminiAIPlugin.Setting.pas' {Frame_Setting_GeminiCodeAssist: TFrame};
+  GeminiAIPlugin.Setting in 'GeminiAIPlugin.Setting.pas' {Frame_Setting_GeminiCodeAssist: TFrame},
+  GeminiAIPlugin.Model.Responses in 'GeminiAIPlugin.Model.Responses.pas',
+  GeminiAIPlugin.Model.Requests in 'GeminiAIPlugin.Model.Requests.pas',
+  GeminiAIPlugin.Model.Common in 'GeminiAIPlugin.Model.Common.pas';
 
 end.

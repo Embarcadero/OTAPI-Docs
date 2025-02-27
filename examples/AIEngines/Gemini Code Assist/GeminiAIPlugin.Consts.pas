@@ -3,7 +3,7 @@ unit GeminiAIPlugin.Consts;
 interface
 
 const
-  cGeminiAI_name = 'Gemini Code Assist';
+  cGeminiAI_name = 'Gemini2';
   cGeminiAI_def_BaseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
   cGeminiAI_def_Model = 'gemini-pro';
   cGeminiAI_Def_Timeout = 30000;
@@ -11,7 +11,7 @@ const
   cGeminiAI_Msg_CheckAPI = 'The API key has not been set.';
   cGeminiAI_Msg_NoAnswer = 'No Answer';
 
-  cGeminiAI_RegKey = 'GeminiCodeAssist';
+  cGeminiAI_RegKey = 'Gemini~';
   cGeminiAI_RegKey_Enabled = 'Enabled';
   cGeminiAI_RegKey_BaseURL = 'BaseURL';
   cGeminiAI_RegKey_Model = 'Model';
@@ -28,7 +28,7 @@ const
   cGeminiAI_ContentType = 'application/json';
 
 /// <summary>
-/// Find Gemini Code Assist API doc here: https://developers.google.com/gemini-code-assist/docs/overview
+/// Find Gemini AI API doc here: https://developers.google.com/gemini-code-assist/docs/overview
 /// </summary>
 
 implementation
