@@ -43,6 +43,7 @@ contains
   GeminiAIPlugin.Setting in 'GeminiAIPlugin.Setting.pas' {Frame_Setting_GeminiCodeAssist: TFrame},
   GeminiAIPlugin.Model.Responses in 'GeminiAIPlugin.Model.Responses.pas',
   GeminiAIPlugin.Model.Requests in 'GeminiAIPlugin.Model.Requests.pas',
-  GeminiAIPlugin.Model.Common in 'GeminiAIPlugin.Model.Common.pas';
+  GeminiAIPlugin.Model.Common in 'GeminiAIPlugin.Model.Common.pas',
+  GeminiAIPlugin.ListModelsResponse in 'GeminiAIPlugin.ListModelsResponse.pas';
 
 end.

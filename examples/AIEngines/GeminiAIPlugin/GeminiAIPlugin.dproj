@@ -6,7 +6,7 @@
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">GeminiAIPlugin</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Package</AppType>
@@ -170,6 +170,7 @@
         <DCCReference Include="GeminiAIPlugin.Model.Responses.pas"/>
         <DCCReference Include="GeminiAIPlugin.Model.Requests.pas"/>
         <DCCReference Include="GeminiAIPlugin.Model.Common.pas"/>
+        <DCCReference Include="GeminiAIPlugin.ListModelsResponse.pas"/>
         <None Include="README.md"/>
         <None Include="GeminiAI Specs.md"/>
         <BuildConfiguration Include="Base">

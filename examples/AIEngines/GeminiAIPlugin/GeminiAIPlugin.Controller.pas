@@ -39,12 +39,24 @@ type
     function AddNotifier(const ANotifier: IOTAAIServicesNotifier): Integer;
     procedure RemoveNotifier(const AIndex: Integer);
   public
+  type
+    TModelInfo = record
+      Name: string;
+      Description: string;
+      DisplayName: string;
+    end;
+  public
     constructor Create;
+    function ListModels: TArray<TModelInfo>;
     destructor Destroy; override;
     function DoChat(const APrompt: string; const ARequestID: TGUID): string;
+    property APIKey: string write FApiKey;
   end;
 
 implementation
+
+uses
+  GeminiAIPlugin.ListModelsResponse, System.StrUtils;
 
 { TGeminiAIRestClient }
 
@@ -233,6 +245,40 @@ begin
   NotifyAnswer(LMessage, ARequestID);
 end;
 
+function TGeminiAIRestClient.ListModels: TArray<TModelInfo>;
+begin
+  var LRestRequest := TRESTRequest.Create(nil);
+  LRestRequest.Method := TRESTRequestMethod.rmGET;
+  try
+    var LBaseURL := 'https://generativelanguage.googleapis.com/v1beta/models';
+    FRestClient.Params.Clear;
+    FRestClient.BaseURL := Format('%s?key=%s', [LBaseURL, FApiKey]);
+    LRestRequest.Client := FRestClient;
+    LRestRequest.Method := TRESTRequestMethod.rmGET;
+    try
+      LRestRequest.Execute;
+      var LListModelsResponse := TGeminiAIListModelsResponse.FromJSON(LRestRequest.Response.Content);
+      for var I := 0 to LListModelsResponse.models.Count-1 do
+        begin
+          var LModel := LListModelsResponse.models[I];
+          var LPrefixedModelName := LModel.name;
+          var LSplitModelNames := SplitString(LPrefixedModelName, '/');
+          if Length(LSplitModelNames) < 2 then
+            Continue;
+          SetLength(Result, Length(Result) + 1);
+          var Idx := High(Result);
+          Result[Idx].Name := LSplitModelNames[1];
+          Result[Idx].Description := LModel.description;
+          Result[Idx].DisplayName := LModel.displayName;
+        end;
+    except
+      // silent
+    end;
+  finally
+    LRestRequest.Free;
+  end;
+end;
+
 function TGeminiAIRestClient.IsParsable(var AJsonObj: TJSONObject): Boolean;
 begin
   AJsonObj := nil;
@@ -256,17 +302,18 @@ end;
 
 procedure TGeminiAIRestClient.PrepareBody(const AValue: string);
 begin
-  FRequestObj := TGeminiAIRequestObj.Create;
+  var LRequestObj := TGeminiAIRequestObj.Create;
+  FRestRequest.Method := TRESTRequestMethod.rmPOST;
   try
     var LContent := TGeminiRequestContent.Create;
     var LPart := TPart.Create;
     LPart.Text := AValue;
     LContent.Parts.Add(LPart);
-    FRequestObj.Contents.Add(LContent);
-    var LBody := FRequestObj.ToJSONString;
+    LRequestObj.Contents.Add(LContent);
+    var LBody := LRequestObj.ToJSONString;
     FRestRequest.AddBody(LBody, TRESTContentType.ctAPPLICATION_JSON);
   finally
-    FreeAndNil(FRequestObj);
+    FreeAndNil(LRequestObj);
   end;
 end;
 

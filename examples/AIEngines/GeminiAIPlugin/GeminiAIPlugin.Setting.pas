@@ -13,8 +13,11 @@ type
     Chk_Enabled: TCheckBox;
     Edt_ApiKey: TLabeledEdit;
     Edt_BaseURL: TLabeledEdit;
-    Edt_Model: TLabeledEdit;
     Edt_Timeout: TLabeledEdit;
+    cbModel: TComboBox;
+    lbl_Model: TLabel;
+    procedure FrameClick(Sender: TObject);
+    procedure cbModelClick(Sender: TObject);
   private
     { Private declarations }
     FInitialEnabled: Boolean;
@@ -27,7 +30,11 @@ type
   protected
     { Protected declarations }
     procedure Loaded; override;
+    procedure ClearCBModelItems;
+    procedure SelectCBModelItem;
+    function GetCBModelItemName: string;
   public
+    destructor Destroy; override;
     class function GetRegKey: string;
     { Public declarations }
     procedure LoadSettings;
@@ -40,17 +47,83 @@ type
 implementation
 
 uses
-  ToolsAPI;
+  ToolsAPI, GeminiAIPlugin.Controller;
 
 {$R *.dfm}
 
+type
+  TModelInfo = TGeminiAIRestClient.TModelInfo;
+  TModelInfoObj = class
+  protected
+    FModelInfo: TModelInfo;
+  public
+    constructor Create(const AModelInfo: TModelInfo);
+    destructor Destroy; override;
+    property Description: string read FModelInfo.Description;
+    property DisplayName: string read FModelInfo.DisplayName;
+    property ModelName: string read FModelInfo.Name;
+  end;
+
+constructor TModelInfoObj.Create(const AModelInfo: TGeminiAIRestClient.TModelInfo);
+begin
+  FModelInfo := AModelInfo;
+end;
+
+destructor TModelInfoObj.Destroy;
+begin
+  inherited;
+end;
+
 { TGeminiAIFrame_Setting }
+
+procedure TFrame_Setting_GeminiCodeAssist.cbModelClick(Sender: TObject);
+begin
+  var LCount := cbModel.Items.Count;
+  if (LCount > 0) and (cbModel.Text <> '') then
+    begin
+      for var I := 0 to LCount - 1 do
+        begin
+          var LModelInfoObj := TModelInfoObj(cbModel.Items.Objects[I]);
+          if (LModelInfoObj.DisplayName = cbModel.Text) or
+             (LModelInfoObj.ModelName = cbModel.Text) then
+          begin
+            cbModel.ShowHint := True;
+            cbModel.Hint := LModelInfoObj.Description;
+            Exit;
+          end;
+        end;
+    end;
+end;
+
+procedure TFrame_Setting_GeminiCodeAssist.ClearCBModelItems;
+begin
+  if cbModel.Items.Count > 0 then
+    begin
+      for var I := cbModel.Items.Count-1 downto 0 do
+        begin
+          var LModelInfoObj := cbModel.Items.Objects[I];
+          LModelInfoObj.Free;
+        end;
+      cbModel.Items.Clear;
+    end;
+end;
+
+destructor TFrame_Setting_GeminiCodeAssist.Destroy;
+begin
+  ClearCBModelItems;
+  inherited;
+end;
+
+procedure TFrame_Setting_GeminiCodeAssist.FrameClick(Sender: TObject);
+begin
+//
+end;
 
 function TFrame_Setting_GeminiCodeAssist.GetModified: Boolean;
 begin
   Result := (FInitialEnabled <> Chk_Enabled.Checked) or
     (FInitialBaseURL <> Edt_BaseURL.Text) or
-    (FInitialModel <> Edt_Model.Text) or
+    (FInitialModel <> cbModel.Text) or
     (FInitialApiKey <> Edt_ApiKey.Text) or
     (FInitialTimeout <> StrToIntDef(Edt_Timeout.Text, 0));
 end;
@@ -81,6 +154,7 @@ end;
 procedure TFrame_Setting_GeminiCodeAssist.LoadSettings;
 var
   LReg: TRegistry;
+  LModelName: string;
 begin
   LReg := TRegistry.Create;
   try
@@ -92,7 +166,12 @@ begin
       if LReg.ValueExists(cGeminiAI_RegKey_BaseURL) then
         Edt_BaseURL.Text := LReg.ReadString(cGeminiAI_RegKey_BaseURL);
       if LReg.ValueExists(cGeminiAI_RegKey_Model) then
-        Edt_Model.Text := LReg.ReadString(cGeminiAI_RegKey_Model);
+        begin
+          LModelName := LReg.ReadString(cGeminiAI_RegKey_Model);
+        end else
+        begin
+          LModelName := '';
+        end;
       if LReg.ValueExists(cGeminiAI_RegKey_ApiKey) then
         Edt_ApiKey.Text := LReg.ReadString(cGeminiAI_RegKey_ApiKey);
       if LReg.ValueExists(cGeminiAI_RegKey_Timeout) then
@@ -101,9 +180,24 @@ begin
     end;
     FInitialEnabled := Chk_Enabled.Checked;
     FInitialBaseURL := Edt_BaseURL.Text;
-    FInitialModel := Edt_Model.Text;
+    FInitialModel := cbModel.Text;
     FInitialApiKey := Edt_ApiKey.Text;
     FInitialTimeout := StrToIntDef(Edt_Timeout.Text, 0);
+    var LGeminiAIController := TGeminiAIRestClient.Create;
+    try
+      ClearCBModelItems; // Clear existing object instances, if any
+      LGeminiAIController.ApiKey := FInitialApiKey;
+      var LModelInfos := LGeminiAIController.ListModels;
+      for var LModelInfo in LModelInfos do
+        begin
+          var LModelInfoObj := TModelInfoObj.Create(LModelInfo);
+          cbModel.Items.AddObject(LModelInfo.DisplayName, LModelInfoObj);
+        end;
+      cbModel.Text := LModelName;
+      SelectCBModelItem;
+    finally
+      LGeminiAIController.Free;
+    end;
   finally
     LReg.Free;
   end;
@@ -126,7 +220,8 @@ begin
     begin
       LReg.WriteBool(cGeminiAI_RegKey_Enabled, Chk_Enabled.Checked);
       LReg.WriteString(cGeminiAI_RegKey_BaseURL, Edt_BaseURL.Text);
-      LReg.WriteString(cGeminiAI_RegKey_Model, Edt_Model.Text);
+      var LModelName := GetCBModelItemName;
+      LReg.WriteString(cGeminiAI_RegKey_Model, LModelName);
       LReg.WriteString(cGeminiAI_RegKey_ApiKey, Edt_ApiKey.Text);
       LReg.WriteInteger(cGeminiAI_RegKey_Timeout, StrToIntDef(Edt_Timeout.Text, 0));
       LReg.CloseKey;
@@ -134,6 +229,42 @@ begin
   finally
     LReg.Free;
   end;
+end;
+
+procedure TFrame_Setting_GeminiCodeAssist.SelectCBModelItem;
+begin
+  var LCount := cbModel.Items.Count;
+  if (LCount > 0) and (cbModel.Text <> '') then
+    begin
+      for var I := 0 to LCount - 1 do
+        begin
+          var LModelInfoObj := TModelInfoObj(cbModel.Items.Objects[I]);
+          if (LModelInfoObj.DisplayName = cbModel.Text) or
+             (LModelInfoObj.ModelName = cbModel.Text) then
+          begin
+            cbModel.Text := LModelInfoObj.DisplayName;
+            Exit;
+          end;
+        end;
+    end;
+end;
+
+function TFrame_Setting_GeminiCodeAssist.GetCBModelItemName: string;
+begin
+  var LCount := cbModel.Items.Count;
+  if (LCount > 0) and (cbModel.Text <> '') then
+    begin
+      for var I := 0 to LCount - 1 do
+        begin
+          var LModelInfoObj := TModelInfoObj(cbModel.Items.Objects[I]);
+          if (LModelInfoObj.DisplayName = cbModel.Text) or
+             (LModelInfoObj.ModelName = cbModel.Text) then
+          begin
+            Result := LModelInfoObj.ModelName;
+            Exit;
+          end;
+        end;
+    end;
 end;
 
 function TFrame_Setting_GeminiCodeAssist.ParameterValidations(var VErrorMsg: string): Boolean;
@@ -156,7 +287,7 @@ begin
         end;
     end;
 
-  if Result and Edt_Model.EditText.Trim.IsEmpty then
+  if Result and string(cbModel.Text).Trim.IsEmpty then
     begin
       Result := False;
       LErrorMsg := cGeminiAI_Msg_Model;

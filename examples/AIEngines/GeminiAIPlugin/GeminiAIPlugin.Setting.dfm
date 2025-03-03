@@ -12,10 +12,23 @@ object Frame_Setting_GeminiCodeAssist: TFrame_Setting_GeminiCodeAssist
   ParentBackground = False
   ParentColor = False
   TabOrder = 0
+  OnClick = FrameClick
   PixelsPerInch = 216
   DesignSize = (
     925
     630)
+  object lbl_Model: TLabel
+    Left = 52
+    Top = 283
+    Width = 77
+    Height = 37
+    Margins.Left = 7
+    Margins.Top = 7
+    Margins.Right = 7
+    Margins.Bottom = 7
+    Caption = 'Model'
+    FocusControl = cbModel
+  end
   object Chk_Enabled: TCheckBox
     AlignWithMargins = True
     Left = 11
@@ -74,28 +87,6 @@ object Frame_Setting_GeminiCodeAssist: TFrame_Setting_GeminiCodeAssist
     TabOrder = 2
     Text = ''
   end
-  object Edt_Model: TLabeledEdit
-    AlignWithMargins = True
-    Left = 52
-    Top = 324
-    Width = 850
-    Height = 45
-    Margins.Left = 52
-    Margins.Top = 38
-    Margins.Right = 23
-    Margins.Bottom = 7
-    Anchors = [akLeft, akTop, akRight]
-    EditLabel.Width = 77
-    EditLabel.Height = 37
-    EditLabel.Margins.Left = 7
-    EditLabel.Margins.Top = 7
-    EditLabel.Margins.Right = 7
-    EditLabel.Margins.Bottom = 7
-    EditLabel.Caption = 'Model'
-    LabelSpacing = 4
-    TabOrder = 3
-    Text = ''
-  end
   object Edt_Timeout: TLabeledEdit
     AlignWithMargins = True
     Left = 52
@@ -115,7 +106,19 @@ object Frame_Setting_GeminiCodeAssist: TFrame_Setting_GeminiCodeAssist
     EditLabel.Caption = 'Timeout'
     LabelSpacing = 4
     NumbersOnly = True
-    TabOrder = 4
+    TabOrder = 3
     Text = ''
+  end
+  object cbModel: TComboBox
+    Left = 52
+    Top = 334
+    Width = 850
+    Height = 45
+    Margins.Left = 7
+    Margins.Top = 7
+    Margins.Right = 7
+    Margins.Bottom = 7
+    TabOrder = 4
+    OnClick = cbModelClick
   end
 end
