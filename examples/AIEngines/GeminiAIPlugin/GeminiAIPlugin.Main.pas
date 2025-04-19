@@ -1,3 +1,11 @@
+{---------------------------------------------------------------------------}
+{                                                                           }
+{ File:      GeminiAIPlugin.Main                                            }
+{ Function:  Gemini AI plugin main unit                                     }
+{                                                                           }
+{ Language:   Delphi version XE12 or later                                  }
+{ Author:     Chee-Wee Chua                                                 }
+{---------------------------------------------------------------------------}
 unit GeminiAIPlugin.Main;
 
 interface

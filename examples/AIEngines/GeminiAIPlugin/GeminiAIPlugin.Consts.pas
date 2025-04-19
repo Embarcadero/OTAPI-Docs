@@ -1,3 +1,11 @@
+{---------------------------------------------------------------------------}
+{                                                                           }
+{ File:      GeminiAIPlugin.Consts                                          }
+{ Function:  Gemini AI plugin constants                                     }
+{                                                                           }
+{ Language:   Delphi version XE12 or later                                  }
+{ Author:     Chee-Wee Chua                                                 }
+{---------------------------------------------------------------------------}
 unit GeminiAIPlugin.Consts;
 
 interface

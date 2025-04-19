@@ -1,3 +1,11 @@
+{---------------------------------------------------------------------------}
+{                                                                           }
+{ File:      GeminiAIPlugin.Setting                                         }
+{ Function:  Gemini AI plugin settings                                      }
+{                                                                           }
+{ Language:   Delphi version XE12 or later                                  }
+{ Author:     Chee-Wee Chua                                                 }
+{---------------------------------------------------------------------------}
 unit GeminiAIPlugin.Setting;
 
 interface

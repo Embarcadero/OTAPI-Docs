@@ -1,3 +1,11 @@
+{---------------------------------------------------------------------------}
+{                                                                           }
+{ File:      GeminiAIPlugin.Controller                                      }
+{ Function:  Gemini AI plugin controller                                    }
+{                                                                           }
+{ Language:   Delphi version XE12 or later                                  }
+{ Author:     Chee-Wee Chua                                                 }
+{---------------------------------------------------------------------------}
 unit GeminiAIPlugin.Controller;
 
 interface
